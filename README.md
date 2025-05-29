@@ -2,59 +2,70 @@
 
 This repository contains the implementation of a **Multimodal Retrieval-Augmented Generation (RAG)** system that answers user queries about **bioinformatics tools** using both **textual** and **visual** context. Built as part of the **AIMS-DTU Research Internship Round 2**, this project demonstrates how LLMs can be combined with domain-specific multimodal retrieval to power intelligent assistants.
 
----
+## 📁 Project Structure
 
-## 🧠 Project Objective
+```
+bioinfo-rag-assistant/
+├── data/                     # Collected tool data (CSV, JSON, images)
+├── embeddings/               # Precomputed text and image embeddings
+├── bioinfo_rag_app.py        # Streamlit frontend interface
+├── retrieval_pipeline.py     # Logic for retrieving relevant multimodal documents
+├── generation_module.py      # GPT-based answer generation from context
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
+```
 
-Develop an AI-powered assistant that can:
-- Ingest and index textual and image-based knowledge about bioinformatics tools
-- Retrieve relevant multimodal context (descriptions, reviews, and tool figures)
-- Generate grounded, insightful, and natural language responses to user questions
+## 📌 Objective
 
----
+To build a **Multimodal RAG system** that can:
+- Accept a natural language query about a bioinformatics tool.
+- Retrieve **textual** (descriptions, reviews, metadata) and **visual** (logos, screenshots) context.
+- Use an **LLM (GPT-4)** to generate a grounded, context-aware answer.
 
 ## 📦 Dataset
 
-A custom dataset was curated covering **50+ bioinformatics tools**, each with:
-- 🧾 **Metadata**: Tool name, function, publication info, category (e.g., genome assembly, variant calling)
-- 💬 **Textual Documents**: Descriptions, use-cases, reviews, user questions, and best practices
-- 🖼️ **Images**: Logos, screenshots, diagrams, flowcharts
+You can collect your own data or refer to the sample metadata CSV under `data/` which includes:
+- Tool Name, Category, Description
+- Associated Logos or Illustrations (saved as image files in `data/`)
 
-> **Note:** Data collected from official documentation, publications, online tutorials, and tool repositories.
+## ⚙️ How It Works
 
----
+1. **Frontend**:
+   - `bioinfo_rag_app.py` renders the interface via Streamlit.
+   - Allows users to input a query and view answers with supporting content.
 
-## 🧰 Features
+2. **Retrieval**:
+   - `retrieval_pipeline.py` loads text/image embeddings and performs similarity search using FAISS.
 
-- 💬 Ask natural-language questions like:
-  - *"Is GATK good for variant calling?"*
-  - *"What tools are used for single-cell RNA-seq analysis?"*
-- 📥 Retrieves context from embedded documents and images
-- 🧠 Generates intelligent answers using OpenAI GPT-4
-- 🌐 Streamlit interface for local interaction and testing
+3. **Answer Generation**:
+   - `generation_module.py` constructs the prompt and queries the OpenAI API to generate an answer.
 
----
+## 💬 Sample Queries
 
-## 🧱 Architecture
+Try asking:
+- “Is GATK good for variant calling?”
+- “What are the best RNA-Seq analysis tools?”
+- “Does Bowtie2 support metagenomic data?”
 
-1. **Data Ingestion**
-   - Tools, metadata, descriptions, and images collected and organized
-2. **Embedding Generation**
-   - Textual documents: Embedded using OpenAI or HuggingFace models
-   - Images: Embedded using CLIP or similar vision models
-3. **Vector Store**
-   - FAISS used for similarity-based retrieval across modalities
-4. **Retrieval Pipeline**
-   - Query embedding → Multimodal document search → Top-k context
-5. **Answer Generation**
-   - Retrieved context + user query → Prompted into LLM for final answer
+## ✅ Setup Instructions
 
----
-
-## 🚀 Setup Instructions
-
-### 1. Clone the Repository
-
+1. Install dependencies:
 ```bash
-git clone https://github.com/your-username/bioinfo-rag-assistant.git
-cd bioinfo-rag-assistant
+pip install -r requirements.txt
+```
+
+2. Set up your `secrets.toml`:
+```toml
+# .streamlit/secrets.toml
+[general]
+openai_api_key = "your-api-key-here"
+```
+
+3. Run the app:
+```bash
+streamlit run bioinfo_rag_app.py
+```
+
+## ✨ Credits
+
+For AIMS-DTU Research Intern Round 2 - Multimodal RAG Track.
